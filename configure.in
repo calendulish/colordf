@@ -1,0 +1,53 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.59)
+AC_INIT(cdf, 0.2, bogorodskiy@inbox.ru)
+AC_CONFIG_SRCDIR([src/main.c])
+AM_CONFIG_HEADER([config.h])
+AM_INIT_AUTOMAKE
+
+# Checks for programs.
+AC_PROG_CC
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_CHECK_HEADERS([unistd.h sys/param.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_SIZE_T
+
+# Checks for library functions.
+AC_CHECK_FUNCS([getmntinfo])
+
+AC_CHECK_LIB(m, rint,LIBS="$LIBS -lm",)
+
+dnl Check whether to include debugging code
+DEBUG=""
+AC_MSG_CHECKING([whether to include verbose debugging code])
+AC_ARG_ENABLE(debug,
+  [  --enable-debug          include verbose debugging code [default=no]],
+  if test x$enableval = "xyes"; then
+	AC_MSG_RESULT([yes])
+	DEBUG="-DDEBUG -Wall -g"
+  else
+    AC_MSG_RESULT([no])
+  fi,   
+  AC_MSG_RESULT([no])
+)       
+AC_SUBST(DEBUG)
+CFLAGS="$CFLAGS $DEBUG"
+
+AC_CONFIG_FILES([Makefile
+		 src/Makefile])
+AC_OUTPUT
+
+AC_MSG_RESULT([])
+AC_MSG_RESULT([ $PACKAGE version $VERSION configured successfully.])
+AC_MSG_RESULT([])
+AC_MSG_RESULT([Using '$prefix' for installation.])
+AC_MSG_RESULT([Using '$CC' for C compiler.])
+AC_MSG_RESULT([Building with '$CFLAGS' for C compiler flags.])
+AC_MSG_RESULT([])

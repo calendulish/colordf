@@ -1,0 +1,14 @@
+Version 0.2
+	- support XDG Base Directory Specification, as of now, config file
+	is stored at $XDG_CONFIG_HOME (~/.config by default)
+	- fix bug when ~/.cdfrc was not read until cdf configured with
+	"--enable-debug" 
+	- set capacity to 100% for pseudofs on FreeBSD, like FreeBSD
+	df(1) does.
+	- added -h arg (human readable mode)
+	- added -H arg (help)
+	- minor code clean-ups
+	
+	
+Version 0.1
+	- First public release

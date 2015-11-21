@@ -1,0 +1,9 @@
+- respect BLOCKSIZE env. var.(?)
+- read blocksize from config(?)
+- support df's -t arg for Linux
+- do not show pseudofs unless -a given or config option is set (simulate Linux
+  df behaviour at this point) (UPDATE: done for BSD)
+- on Linux: for pseudofs do not show capacity and gauge 
+- do we need to have system wide config like /etc/cdf.conf or ~/.cdfrc are quite enought?
+- support df's -c
+- add manpage

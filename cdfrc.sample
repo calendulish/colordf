@@ -1,0 +1,40 @@
+# ~/.cdfrc
+# 
+# Sample configuration file for cdf
+#
+# $Id: cdfrc.sample 21 2005-02-03 14:11:13Z novel $
+#
+
+# List of avaible colors:
+#
+# normal (actually, disables any coloring)
+# red
+# green
+# yellow
+# blue
+# magenta
+# cyan
+# white
+#
+#   gauge color
+#   |
+# [>>>>  ]
+#        ^bracket_color
+#	
+bracket_color = blue
+gauge_color = yellow
+
+# Color of the table header 
+header_color = cyan
+
+# Color of the filesystem name 
+fs_color = normal
+
+# Other data - usage/free/total, etc
+data_color = normal
+
+# Color of the capacity valie - something like (10%). 
+perc_color = normal
+
+# human-readable mode
+human_readable = 1
