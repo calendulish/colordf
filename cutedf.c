@@ -18,6 +18,8 @@
  * $Id: main.c 26 2005-03-05 17:04:42Z novel $
  */
 
+#define VERSION "CuteDF v0.0.0"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -39,7 +41,7 @@ int main(int argc, char **argv)
 	int i,
 	    ch;
 	char *fs_type = "all";
-	
+
 	blocksize = 1048576;
 	show_pseudofs = 0;
 
@@ -51,7 +53,7 @@ int main(int argc, char **argv)
 			blocksize = 1;
 		}
 	}
-			
+
      	while ((ch = getopt(argc, argv, "Haghkmt:v")) != -1)
         	switch (ch) {
 			case 'a':
@@ -68,13 +70,13 @@ int main(int argc, char **argv)
 				break;
 			case 'h':
 				human_readable = 1;
-				blocksize = 1; 
+				blocksize = 1;
 				break;
 			case 't':
 				fs_type = strdup(optarg);
-				break;		
+				break;
 			case 'v':
-				(void)fprintf(stderr, "%s\n\n", PACKAGE_STRING);
+				(void)fprintf(stderr, "%s\n\n", VERSION);
 				return 0;
 			case 'H':
 				show_help();
@@ -86,13 +88,13 @@ int main(int argc, char **argv)
      	argv += optind;
 
 	read_colors();
-	
-	if (argc == 0) 
+
+	if (argc == 0)
 		display_all_fs(fs_type);
-	else 
+	else
 		for (i = 0; i< argc; i++)
 			display_single_fs(argv[i]);
-	
+
 	return 0;
 }
 
@@ -108,8 +110,8 @@ static void show_help()
 		     "\t-t type\t	show only filesyitems of specified type\n"
 		     "\t-v\t	print version and exit\n"
 		     "\t-H\t	print this text and exit\n\n",
-		     PACKAGE_STRING);
-		  
+		     VERSION);
+
 	exit(0);
 }
 
