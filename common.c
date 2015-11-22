@@ -56,7 +56,7 @@ void header()
 	printf("%s", header_color);
 
 	if (header_showed == 0) {
-		printf("%-12s %7s %7s %7s %7s %-9s %s\n",
+		printf("%-10s %12s %7s %7s %7s %-18s %s\n",
 				"Filesystem",
 				"Type",
 				"Free",

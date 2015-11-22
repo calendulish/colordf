@@ -163,7 +163,7 @@ void statfs_display_single_fs(const struct statfs *s, const char *device, const 
 	else
 		usage = 100;
 
-	(void)printf("%s%-12s%s %7s %s %s %s %-9s %s %s(%i%%)%s\n",
+	(void)printf("%s%-10s%s %12s %s %s %s %-18s %s %s(%i%%)%s\n",
 		     	fs_color,
 		        device,
 			data_color,
