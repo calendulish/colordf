@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2004  Roman Bogorodskiy
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12,12 +10,12 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * $Id: colors.c 15 2004-10-22 14:14:08Z novel $
+ * Copyright (C) 2004  Roman Bogorodskiy <bogorodskiy@inbox.ru>
+ *                     Pierre Chifflier <chifflier@cpe.fr>
+ *               2016  Lara Maia <dev@lara.click>
  */
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,9 +27,9 @@
 
 char *cl(const char *color)
 {
-	if (!color) 
+	if (!color)
 		return NULL;
-	else if (strcmp(color, "normal") == 0) 
+	else if (strcmp(color, "normal") == 0)
 		return NORMAL;
 	else if (strcmp(color, "red") == 0)
 		return RED;
@@ -47,7 +45,7 @@ char *cl(const char *color)
 		return CYAN;
 	else if (strcmp(color, "white") == 0)
 		return WHITE;
-	
+
 	return NULL;
 }
 
@@ -60,7 +58,7 @@ int read_colors()
 	data_color = (char *)malloc(64);
 	perc_color = (char *)malloc(64);
 
-	
+
 	if (!(bracket_color = cl(get_config_item("bracket_color"))))
 		bracket_color = BLUE;
 	if (!(gauge_color = cl(get_config_item("gauge_color"))))
