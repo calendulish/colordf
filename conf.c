@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2004, 2005  Roman Bogorodskiy
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12,10 +10,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * $Id: conf.c 23 2005-02-03 19:33:01Z novel $
+ * Copyright (C) 2004  Roman Bogorodskiy <bogorodskiy@inbox.ru>
+ *                     Pierre Chifflier <chifflier@cpe.fr>
+ *               2016  Lara Maia <dev@lara.click>
  */
 
 #include <stdio.h>
@@ -28,21 +27,21 @@
 
 #define MAXLEN	255
 
-static char *get_config_filename() 
+static char *get_config_filename()
 {
-	/* 
+	/*
 	 * we try to respect XDG Base Directory Specification:
 	 * http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
 	 */
 	char *config_home;
 	char *config_full_path;
 	char *xdg_config_home;
-	
+
 	config_home = (char *)malloc(256);
 	config_full_path = (char *)malloc(256);
-	
+
 	xdg_config_home = getenv("XDG_CONFIG_HOME");
-	
+
 	if (xdg_config_home != NULL) {
 		if (strlen(xdg_config_home) != 0) {
 			(void)snprintf(config_home, 255, "%s/.config", xdg_config_home);
@@ -50,10 +49,10 @@ static char *get_config_filename()
 	} else {
 		char *home;
 		home = getenv("HOME");
-		
+
 		if (home != NULL) {
 			(void)snprintf(config_home, 255, "%s/.config", home);
-		} else 
+		} else
 			return NULL;
 	}
 
@@ -62,7 +61,7 @@ static char *get_config_filename()
 	free(config_home);
 
 	return config_full_path;
-}	
+}
 
 /* some notes:
  *
@@ -84,19 +83,19 @@ int read_config_file(void)
 
 	filename = (char *)malloc(256);
 	filename = get_config_filename();
-	
+
 	m = (char *)malloc(MAXLEN);
         m2 = (char *)malloc(MAXLEN);
 	line = m;
-	
+
 	if ((cfg_file = fopen((char *)filename, "r")) == NULL)
 		goto cleanup;
-	
+
         /* -1 because fgets keeps the \n */
 	while (fgets(line, MAXLEN-1, cfg_file)) {
 		char *var = (char *)malloc(MAXLEN);
 		char *val = (char *)malloc(MAXLEN);
-		
+
 dirty_label:
 		/* skip emtpy strings */
 		if (strlen(line) < 2)
@@ -104,7 +103,7 @@ dirty_label:
 
                 if (line[strlen(line)-1] == '\n')
                 	line[strlen(line)-1] = '\0';
-		
+
 		/* get rid of whitespaces at the beginning of line */
 		while (*line && isspace(*line))
 			line++;
@@ -118,7 +117,7 @@ dirty_label:
                   /* first, strip right part of line */
                   	*comment-- = '\0';
                 }
-                  
+
                 length = strlen(line);
 
                 /* now, strip trailing spaces */
@@ -134,12 +133,12 @@ dirty_label:
                     		fprintf(stderr, "nothing more to read, awaiting at least one more line\n");
                     	exit (1);
                   	}
-                  
+
 			/* skip leading spaces */
                   	ptr = m2;
                   	while (*ptr && isspace(*ptr))
                     		ptr++;
-                  
+
 			/* offset is that hard bcs we moved line from its orig position .. */
                   	/* we use -1 to remove \ */
                   	strncpy(line+length-1, ptr, MAXLEN-length-(line-m));
@@ -148,7 +147,7 @@ dirty_label:
 
                 var = (char *)strtok_r(line, "=", &val);
 		var[strlen(var) - 1] = '\0';
-		
+
                 /* remove trailing spaces in var, and leading spaces in value */
                 ptr = var + strlen(var) - 1;
                 while (ptr > var && isspace(*ptr)) ptr--;
@@ -164,7 +163,7 @@ cleanup:
 	free(filename);
 	free(m2);
 	free(m);
-	
+
 	return 0;
 }
 
@@ -174,8 +173,6 @@ char *get_config_item(char *name)
 
 	if ((np = lookup(name)) != NULL)
 		return np->value;
-	
+
 	return NULL;
 }
-
-	

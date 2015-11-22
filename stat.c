@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2004  Roman Bogorodskiy
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12,10 +10,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * $Id: stat.c 25 2005-02-05 11:53:17Z pollux $
+ * Copyright (C) 2004  Roman Bogorodskiy <bogorodskiy@inbox.ru>
+ *                     Pierre Chifflier <chifflier@cpe.fr>
+ *               2016  Lara Maia <dev@lara.click>
  */
 
 #include <stdio.h>
@@ -111,14 +110,14 @@ struct mount_entry *read_filesystem_list(const char *fs_type)
 void display_single_fs(const char *filesystem)
 {
 	struct statfs s;
-	
+
 	if (statfs(filesystem, &s) == -1) {
 		perror("statfs()");
 		return;
 	}
 
 #ifdef BSD
-	statfs_display_single_fs(&s, s.f_mntfromname, 
+	statfs_display_single_fs(&s, s.f_mntfromname,
 			s.f_mntonname, s.f_fstypename);
 #endif
 #ifdef __linux__
@@ -132,7 +131,7 @@ void display_single_fs(const char *filesystem)
            for (mnt=mount_list; mnt!=NULL; mnt=mnt->me_next)
            {
              if (statfs(mnt->me_mountdir, &t) == -1) {
-               ERROR("damn!");	
+               ERROR("damn!");
                return;
              }
              if (memcmp(&s,&t,sizeof(struct statfs))==0) { /* found ! */
@@ -148,8 +147,8 @@ void display_single_fs(const char *filesystem)
 void statfs_display_single_fs(const struct statfs *s, const char *device, const char *mountpoint, const char *fstype)
 {
 	uint64_t total, free, used;
-	int usage;	
-	
+	int usage;
+
 	total = (double)s->f_blocks * (double)s->f_bsize / blocksize;
 	free = (double)s->f_bfree * (double)s->f_bsize / blocksize;
 	used = (double)total - (double)free;
@@ -157,12 +156,12 @@ void statfs_display_single_fs(const struct statfs *s, const char *device, const 
 	header();
 
 	/* check for pseudofs */
-	if (total != 0)	
+	if (total != 0)
 		usage = (int)rint((double)((1.0 - (double)free/(double)total)*100.0));
 	else
 		usage = 100;
-	
-	(void)printf("%s%-12s%s %7s %s %s %s %-9s %s %s(%i%%)%s\n", 
+
+	(void)printf("%s%-12s%s %7s %s %s %s %-9s %s %s(%i%%)%s\n",
 		     	fs_color,
 		        device,
 			data_color,
@@ -184,7 +183,7 @@ void show_dev(const struct mount_entry * mnt)
   struct statfs s;
 
   if (statfs(mnt->me_mountdir, &s) == -1) {
-    ERROR("damn!");	
+    ERROR("damn!");
     return;
   }
 
@@ -207,4 +206,4 @@ void display_all_fs(const char *fstype)
   {
     show_dev(mnt);
   }
-}	
+}

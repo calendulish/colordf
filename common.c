@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2004, 2005  Roman Bogorodskiy
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12,10 +10,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * $Id: common.c 25 2005-02-05 11:53:17Z pollux $
+ * Copyright (C) 2004  Roman Bogorodskiy <bogorodskiy@inbox.ru>
+ *                     Pierre Chifflier <chifflier@cpe.fr>
+ *               2016  Lara Maia <dev@lara.click>
  */
 
 #include <stdio.h>
@@ -34,7 +33,7 @@ char *bar(unsigned short n)
 	char *ret = (char *)malloc(64);
 
         *gauge = '\0'; /* avoid apparition of artefacts: strcat on non-initialized memory ... */
-	
+
 	if (n > 10)
 		return NULL;
 
@@ -55,9 +54,9 @@ char *bar(unsigned short n)
 void header()
 {
 	printf("%s", header_color);
-	
+
 	if (header_showed == 0) {
-		printf("%-12s %7s %7s %7s %7s %-9s %s\n", 
+		printf("%-12s %7s %7s %7s %7s %-9s %s\n",
 				"Filesystem",
 				"Type",
 				"Free",
@@ -80,7 +79,7 @@ char *expand_filename(char *str)
 	if (str[0] != '~')
 		return str;
 	str++;
-	
+
 	if ((int)getenv("HOME") != -1) {
 		char *home;
 		home = (char *)getenv("HOME");
@@ -89,15 +88,15 @@ char *expand_filename(char *str)
 		(void)fprintf(stderr, "Error: environment variable HOME is not set.\n");
 		 exit(-1);
 	}
-	
+
 	return str;
-}													      
+}
 
 short is_pseudofs(const char *fs_type)
 {
 	/* XXX:
 	   - this list is not complete yet
-	   - I'm not sure how it will work on Linux 
+	   - I'm not sure how it will work on Linux
 	*/
 
 	if ((strcmp(fs_type, "devfs") == 0) ||
@@ -107,7 +106,7 @@ short is_pseudofs(const char *fs_type)
 		(strcmp(fs_type, "usbfs") == 0)) {
 			return 1;
 	}
-			     
+
 	return 0;
 }
 
@@ -129,6 +128,6 @@ char *numeric_value(const double bytes)
 		}
 	} else
 		(void)snprintf(buf, 255, "%7.0f", bytes);
-		
+
 	return buf;
 }
