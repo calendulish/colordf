@@ -153,6 +153,8 @@ void statfs_display_single_fs(const struct statfs *s, const char *device, const 
 	free = (double)s->f_bfree * (double)s->f_bsize / blocksize;
 	used = (double)total - (double)free;
 
+	if(!total) return;
+
 	header();
 
 	/* check for pseudofs */
