@@ -21,7 +21,9 @@
 #define CONFIG_H
 
 int read_config_file(void);
+
 static char *get_config_filename(void);
+
 char *get_config_item(char *name);
 
 #endif /* CONFIG_H */

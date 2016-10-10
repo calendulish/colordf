@@ -28,16 +28,15 @@
 #endif
 
 /* A mount table entry. */
-struct mount_entry
-{
-  char *me_devname;             /* Device node pathname, including "/dev/". */
-  char *me_mountdir;            /* Mount point directory pathname. */
-  char *me_type;                /* "nfs", "4.2", etc. */
-  dev_t me_dev;                 /* Device number of me_mountdir. */
-  unsigned int me_dummy : 1;    /* Nonzero for dummy filesystems. */
-  unsigned int me_remote : 1;   /* Nonzero for remote fileystems. */
-  unsigned int me_type_malloced : 1; /* Nonzero if me_type was malloced. */
-  struct mount_entry *me_next;
+struct mount_entry {
+    char *me_devname;             /* Device node pathname, including "/dev/". */
+    char *me_mountdir;            /* Mount point directory pathname. */
+    char *me_type;                /* "nfs", "4.2", etc. */
+    dev_t me_dev;                 /* Device number of me_mountdir. */
+    unsigned int me_dummy : 1;    /* Nonzero for dummy filesystems. */
+    unsigned int me_remote : 1;   /* Nonzero for remote fileystems. */
+    unsigned int me_type_malloced : 1; /* Nonzero if me_type was malloced. */
+    struct mount_entry *me_next;
 };
 
 #ifndef ME_DUMMY
@@ -62,10 +61,13 @@ struct mount_entry
 
 /*struct mount_entry *read_filesystem_list (int need_fs_type);*/
 struct mount_entry *read_filesystem_list(const char *fs_type);
-void show_dev(const struct mount_entry * mnt);
+
+void show_dev(const struct mount_entry *mnt);
 
 void display_single_fs(const char *filesystem);
+
 void statfs_display_single_fs(const struct statfs *s, const char *device, const char *mountpoint, const char *fstype);
+
 void display_all_fs(const char *fstype);
 
 #endif /* STAT_H */

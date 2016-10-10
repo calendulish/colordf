@@ -23,42 +23,39 @@
 
 #include "hash.h"
 
-unsigned hash(char *s)
-{
-	unsigned hashval;
+unsigned hash(char *s) {
+    unsigned hashval;
 
-	for (hashval = 0; *s != '\0'; s++)
-		hashval = *s + 31 * hashval;
-	return hashval % HASHSIZE;
+    for (hashval = 0; *s != '\0'; s++)
+        hashval = *s + 31 * hashval;
+    return hashval % HASHSIZE;
 }
 
-struct hash_t *lookup(char *s)
-{
-	struct hash_t *np;
+struct hash_t *lookup(char *s) {
+    struct hash_t *np;
 
-	for (np = hashtab[hash(s)]; np != NULL; np = np->next)
-		if (strcmp(s, np->name) == 0)
-			return np;
-	return NULL;
+    for (np = hashtab[hash(s)]; np != NULL; np = np->next)
+        if (strcmp(s, np->name) == 0)
+            return np;
+    return NULL;
 }
 
-struct hash_t *install(char *name, char *value)
-{
-	struct hash_t *np;
-	unsigned hashval;
+struct hash_t *install(char *name, char *value) {
+    struct hash_t *np;
+    unsigned hashval;
 
-	if ((np = lookup(name)) == NULL) {
-		np = (struct hash_t *)malloc(sizeof(*np));
-		if (np == NULL || (np->name = strdup(name)) == NULL)
-			return NULL;
-		hashval = hash(name);
-		np->next = hashtab[hashval];
-		hashtab[hashval] = np;
-	} else
-		free((void *)np->value);
+    if ((np = lookup(name)) == NULL) {
+        np = (struct hash_t *) malloc(sizeof(*np));
+        if (np == NULL || (np->name = strdup(name)) == NULL)
+            return NULL;
+        hashval = hash(name);
+        np->next = hashtab[hashval];
+        hashtab[hashval] = np;
+    } else
+        free((void *) np->value);
 
-	if ((np->value = strdup(value)) == NULL)
-		return NULL;
+    if ((np->value = strdup(value)) == NULL)
+        return NULL;
 
-	return np;
+    return np;
 }
