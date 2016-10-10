@@ -34,8 +34,6 @@ short human_readable;
 
 short show_pseudofs;
 
-char *expand_filename(char *str);
-
 short is_pseudofs(const char *fs_type);
 
 char *numeric_value(const double bytes);

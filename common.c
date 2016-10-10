@@ -69,26 +69,6 @@ void header() {
     printf("%s", NORMAL);
 }
 
-/* expand_filename(): ~/bar -> /home/foo/bar */
-
-char *expand_filename(char *str) {
-
-    if (str[0] != '~')
-        return str;
-    str++;
-
-    if ((int) getenv("HOME") != -1) {
-        char *home;
-        home = (char *) getenv("HOME");
-        str = strcat(home, str);
-    } else {
-        (void) fprintf(stderr, "Error: environment variable HOME is not set.\n");
-        exit(-1);
-    }
-
-    return str;
-}
-
 short is_pseudofs(const char *fs_type) {
     /* XXX:
        - this list is not complete yet
