@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,91 +34,89 @@
 #include "conf.h"
 
 static void show_help();
+
 static void usage();
 
-int main(int argc, char **argv)
-{
-	int i,
-	    ch;
-	char *fs_type = "all";
+int main(int argc, char **argv) {
+    int i,
+        ch;
+    char *fs_type = "all";
 
-	blocksize = 1048576;
-	show_pseudofs = 0;
+    blocksize = 1048576;
+    show_pseudofs = 0;
 
-	read_config_file();
+    read_config_file();
 
-	if (get_config_item("human_readable")) {
-		if (atoi((const char*)get_config_item("human_readable")) == 1) {
-			human_readable = 1;
-			blocksize = 1;
-		}
-	}
+    if (get_config_item("human_readable")) {
+        if (atoi((const char *) get_config_item("human_readable")) == 1) {
+            human_readable = 1;
+            blocksize = 1;
+        }
+    }
 
-     	while ((ch = getopt(argc, argv, "Haghkmt:v")) != -1)
-        	switch (ch) {
-			case 'a':
-				show_pseudofs = 1;
-				break;
-             		case 'k':
-				blocksize = 1024;
-                     		break;
-             		case 'm':
-				blocksize = 1048576;
-                     		break;
-			case 'g':
-				blocksize = 1073741824;
-				break;
-			case 'h':
-				human_readable = 1;
-				blocksize = 1;
-				break;
-			case 't':
-				fs_type = strdup(optarg);
-				break;
-			case 'v':
-				(void)fprintf(stderr, "%s\n\n", VERSION);
-				return 0;
-			case 'H':
-				show_help();
-             		case '?':
-             		default:
-                     		usage();
-             	}
-	argc -= optind;
-     	argv += optind;
+    while ((ch = getopt(argc, argv, "Haghkmt:v")) != -1)
+        switch (ch) {
+            case 'a':
+                show_pseudofs = 1;
+                break;
+            case 'k':
+                blocksize = 1024;
+                break;
+            case 'm':
+                blocksize = 1048576;
+                break;
+            case 'g':
+                blocksize = 1073741824;
+                break;
+            case 'h':
+                human_readable = 1;
+                blocksize = 1;
+                break;
+            case 't':
+                fs_type = strdup(optarg);
+                break;
+            case 'v':
+                (void) fprintf(stderr, "%s\n\n", VERSION);
+                return 0;
+            case 'H':
+                show_help();
+            case '?':
+            default:
+                usage();
+        }
+    argc -= optind;
+    argv += optind;
 
-	read_colors();
+    read_colors();
 
-	if (argc == 0)
-		display_all_fs(fs_type);
-	else
-		for (i = 0; i< argc; i++)
-			display_single_fs(argv[i]);
+    if (argc == 0)
+        display_all_fs(fs_type);
+    else
+        for (i = 0; i < argc; i++)
+            display_single_fs(argv[i]);
 
-	return 0;
+    return 0;
 }
 
-static void show_help()
-{
-	(void)printf("%s\n\n"
-		     "Options:\n"
-		     "\t-a\t	show pseudofs\n"
-		     "\t-k\t	use 1K blocksize\n"
-		     "\t-m\t	use 1M blocksize\n"
-		     "\t-g\t	use 1G blocksize\n"
-		     "\t-h\t	human-readable output\n"
-		     "\t-t type\t	show only filesyitems of specified type\n"
-		     "\t-v\t	print version and exit\n"
-		     "\t-H\t	print this text and exit\n\n",
-		     VERSION);
+static void show_help() {
+    (void) printf("%s\n\n"
+                      "Options:\n"
+                      "\t-a\t	show pseudofs\n"
+                      "\t-k\t	use 1K blocksize\n"
+                      "\t-m\t	use 1M blocksize\n"
+                      "\t-g\t	use 1G blocksize\n"
+                      "\t-h\t	human-readable output\n"
+                      "\t-t type\t	show only filesyitems of specified type\n"
+                      "\t-v\t	print version and exit\n"
+                      "\t-H\t	print this text and exit\n\n",
+                  VERSION);
 
-	exit(0);
+    exit(0);
 }
 
-static void usage()
-{
+static void usage() {
 
-	(void)fprintf(stderr, "Usage: cdf [ -aghkm ] [ -t type ] [ -v ] [ -H ]\n\n");
+    (void) fprintf(stderr, "Usage: cdf [ -aghkm ] [ -t type ] [ -v ] [ -H ]\n\n");
 
-	exit(0);
+    exit(0);
 }

@@ -31,7 +31,7 @@
 
 char *cl(const char *color);
 
-int  read_colors();
+int read_colors();
 
 char *bracket_color;
 char *gauge_color;
