@@ -1,7 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -O2 -lm
 INSTALL = /usr/bin/install
-OBJS = cutedf.o common.o hash.o colors.o conf.o stat.o
+SRCS = $(wildcard src/*.c)
+OBJS=$(patsubst %.c,%.o,$(SRCS))
 TARGET = cutedf
 PREFIX = /usr/local
 BINDIR = $(PREFIX)/bin
@@ -12,7 +13,7 @@ cutedf: $(OBJS)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 clean:
-	@rm -f *.o $(TARGET)
+	@rm -f $(OBJS) $(TARGET)
 
 install: all
 	$(INSTALL) -D -s $(TARGET) $(DESTDIR)$(BINDIR)/$(TARGET)
