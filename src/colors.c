@@ -69,7 +69,7 @@ int read_colors()
 		fs_color = CYAN;
 	if (!(data_color = cl(get_config_item("data_color"))))
 		data_color = NORMAL;
-	if (!(perc_color = cl(get_config_item("perc_color"))));
+	if (!(perc_color = cl(get_config_item("perc_color"))))
 		perc_color = CYAN;
 
 	return 0;
