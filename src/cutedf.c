@@ -106,7 +106,7 @@ static void show_help() {
                       "\t-m\t    use 1M blocksize\n"
                       "\t-g\t    use 1G blocksize\n"
                       "\t-h\t    human-readable output\n"
-                      "\t-t type\t    show only filesyitems of specified type\n"
+                      "\t-t type\t    show only filesystems of specified type\n"
                       "\t-v\t    print version and exit\n"
                       "\t-H\t    print this text and exit\n\n",
                   VERSION);
