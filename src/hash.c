@@ -23,6 +23,9 @@
 
 #include "hash.h"
 
+#define HASHSIZE 101
+struct hash_t *hashtab[HASHSIZE];
+
 unsigned hash(char *s) {
     unsigned hashval;
 

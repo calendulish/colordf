@@ -28,11 +28,11 @@ char *bar(unsigned short n);
 
 void header();
 
-double blocksize;
-char bs_suff;
-short human_readable;
+extern double blocksize;
+extern char bs_suff;
+extern short human_readable;
 
-short show_pseudofs;
+extern short show_pseudofs;
 
 short is_pseudofs(const char *fs_type);
 
