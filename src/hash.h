@@ -26,9 +26,6 @@ struct hash_t {
     char *value;
 };
 
-#define HASHSIZE 101
-struct hash_t *hashtab[HASHSIZE];
-
 unsigned hash(char *);
 
 struct hash_t *lookup(char *);

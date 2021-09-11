@@ -24,6 +24,12 @@
 #include "common.h"
 #include "colors.h"
 
+double blocksize;
+char bs_suff;
+short human_readable;
+
+short show_pseudofs;
+
 int header_showed = 0;
 
 char *bar(unsigned short n) {

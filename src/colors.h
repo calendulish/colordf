@@ -33,11 +33,11 @@ char *cl(const char *color);
 
 int read_colors();
 
-char *bracket_color;
-char *gauge_color;
-char *header_color;
-char *fs_color;
-char *data_color;
-char *perc_color;
+extern char *bracket_color;
+extern char *gauge_color;
+extern char *header_color;
+extern char *fs_color;
+extern char *data_color;
+extern char *perc_color;
 
 #endif

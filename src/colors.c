@@ -25,6 +25,13 @@
 #include "conf.h"
 #include "common.h"
 
+char *bracket_color;
+char *gauge_color;
+char *header_color;
+char *fs_color;
+char *data_color;
+char *perc_color;
+
 char *cl(const char *color)
 {
 	if (!color)
