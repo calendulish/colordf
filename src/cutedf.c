@@ -101,14 +101,14 @@ int main(int argc, char **argv) {
 static void show_help() {
     (void) printf("%s\n\n"
                       "Options:\n"
-                      "\t-a\t	show pseudofs\n"
-                      "\t-k\t	use 1K blocksize\n"
-                      "\t-m\t	use 1M blocksize\n"
-                      "\t-g\t	use 1G blocksize\n"
-                      "\t-h\t	human-readable output\n"
-                      "\t-t type\t	show only filesyitems of specified type\n"
-                      "\t-v\t	print version and exit\n"
-                      "\t-H\t	print this text and exit\n\n",
+                      "\t-a\t    show pseudofs\n"
+                      "\t-k\t    use 1K blocksize\n"
+                      "\t-m\t    use 1M blocksize\n"
+                      "\t-g\t    use 1G blocksize\n"
+                      "\t-h\t    human-readable output\n"
+                      "\t-t type\t    show only filesyitems of specified type\n"
+                      "\t-v\t    print version and exit\n"
+                      "\t-H\t    print this text and exit\n\n",
                   VERSION);
 
     exit(0);
