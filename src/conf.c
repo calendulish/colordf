@@ -25,7 +25,7 @@
 #include "conf.h"
 #include "hash.h"
 
-#define MAXLEN    255
+#define MAXLEN 255
 
 static char *get_config_filename() {
     /*
@@ -36,40 +36,28 @@ static char *get_config_filename() {
     char *config_full_path;
     char *xdg_config_home;
 
-    config_home = (char *) malloc(256);
-    config_full_path = (char *) malloc(256);
+    config_home = (char *) malloc(MAXLEN + 1);
+    config_full_path = (char *) malloc(MAXLEN + 1);
 
     xdg_config_home = getenv("XDG_CONFIG_HOME");
 
-    if (xdg_config_home != NULL) {
-        if (strlen(xdg_config_home) != 0) {
-            (void) snprintf(config_home, 255, "%s/.config", xdg_config_home);
-        }
+    if (xdg_config_home != NULL && strlen(xdg_config_home) != 0) {
+            snprintf(config_home, MAXLEN, "%s/.config", xdg_config_home);
     } else {
         char *home;
         home = getenv("HOME");
 
-        if (home != NULL) {
-            (void) snprintf(config_home, 255, "%s/.config", home);
+        if (home != NULL && strlen(home) != 0) {
+            snprintf(config_home, MAXLEN, "%s/.config", home);
         } else
             return NULL;
     }
 
-
-    (void) snprintf(config_full_path, 256, "%s/cdfrc", config_home);
+    snprintf(config_full_path, MAXLEN, "%s/cutedf.conf", config_home);
     free(config_home);
 
     return config_full_path;
 }
-
-/* some notes:
- *
- *  - the dirty label / goto can be cleverly changed to a do { } while loop
- *  - we should add the case were value begins with a " or '
- *  - all spaces before or after value are ignored, but NOT inside value
- *  - a (very) simple optimization would be to get indexes of all special chars in one pass:
- *     =, #, first non-null char, last char
- */
 
 int read_config_file(void) {
     FILE *cfg_file = NULL;
@@ -79,84 +67,95 @@ int read_config_file(void) {
     unsigned int length;
     char *filename;
 
-    filename = (char *) malloc(256);
+    filename = (char *) malloc(MAXLEN + 1);
     filename = get_config_filename();
+
+    if (!filename) {
+        fprintf(stderr, "Failed to get config filename\n");
+        free(filename);
+        return 1;
+    }
 
     m = (char *) malloc(MAXLEN);
     m2 = (char *) malloc(MAXLEN);
     line = m;
 
-    if ((cfg_file = fopen((char *) filename, "r")) == NULL)
-        goto cleanup;
+    if ((cfg_file = fopen(filename, "r")) == NULL) {
+        free(filename);
+        free(m2);
+        free(m);
+        return 1;
+    }
 
-    /* -1 because fgets keeps the \n */
     while (fgets(line, MAXLEN - 1, cfg_file)) {
         char *var = (char *) malloc(MAXLEN);
         char *val = (char *) malloc(MAXLEN);
 
-        dirty_label:
-        /* skip emtpy strings */
-        if (strlen(line) < 2)
-            continue;
+        while (strlen(line) > 1) {
+            if (line[strlen(line) - 1] == '\n')
+                line[strlen(line) - 1] = '\0';
 
-        if (line[strlen(line) - 1] == '\n')
-            line[strlen(line) - 1] = '\0';
+            /* get rid of whitespaces at the beginning of line */
+            while (*line && isspace(*line))
+                line++;
 
-        /* get rid of whitespaces at the beginning of line */
-        while (*line && isspace(*line))
-            line++;
+            /* skip commented lines and lines without "=" */
+            if (!line[0] || line[0] == '#' || !strchr(line, '='))
+                break;
 
-        /* skip commented lines and lines without "=" */
-        if (!line[0] || line[0] == '#' || !strchr(line, '='))
-            continue;
-
-        comment = strchr(line, '#');
-        if (comment) {
-            /* first, strip right part of line */
-            *comment-- = '\0';
-        }
-
-        length = strlen(line);
-
-        /* now, strip trailing spaces */
-        while (length > 0 && isspace(line[length - 1])) {
-            line[--length] = '\0';
-        }
-
-        /* check if var is multi-line */
-        if (line[length - 1] == '\\') {
-            /* read next line */
-            if (!fgets(m2, MAXLEN, cfg_file)) {
-                fprintf(stderr, "nothing more to read, awaiting at least one more line\n");
-                exit(1);
+            comment = strchr(line, '#');
+            if (comment) {
+                /* first, strip right part of line */
+                *comment-- = '\0';
             }
 
-            /* skip leading spaces */
-            ptr = m2;
-            while (*ptr && isspace(*ptr))
-                ptr++;
+            length = strlen(line);
 
-            /* offset is that hard bcs we moved line from its orig position .. */
-            /* we use -1 to remove \ */
-            strncpy(line + length - 1, ptr, MAXLEN - length - (line - m));
-            goto dirty_label;
+            /* now, strip trailing spaces */
+            while (length > 0 && isspace(line[length - 1])) {
+                line[--length] = '\0';
+            }
+
+            /* check if var is multi-line */
+            if (line[length - 1] == '\\') {
+                /* read next line */
+                if (!fgets(m2, MAXLEN, cfg_file)) {
+                    fprintf(stderr, "nothing more to read, awaiting at least one more line\n");
+                    free(filename);
+                    free(m2);
+                    free(m);
+                    fclose(cfg_file);
+                    return 1;
+                }
+
+                /* skip leading spaces */
+                ptr = m2;
+                while (*ptr && isspace(*ptr))
+                    ptr++;
+
+                /* offset is that hard bcs we moved line from its orig position... */
+                /* we use -1 to remove \ */
+                strncpy(line + length - 1, ptr, MAXLEN - length - (line - m));
+            }
+
+            break;
         }
 
-        var = (char *) strtok_r(line, "=", &val);
-        var[strlen(var) - 1] = '\0';
+        var = strtok_r(line, "=", &val);
 
-        /* remove trailing spaces in var, and leading spaces in value */
-        ptr = var + strlen(var) - 1;
-        while (ptr > var && isspace(*ptr)) ptr--;
-        while (*val && isspace(*val)) val++;
+        if (var) {
+            var[strlen(var) - 1] = '\0';
 
-        (void) install(var, val);
+            /* remove trailing spaces in var, and leading spaces in value */
+            ptr = var + strlen(var) - 1;
+            while (ptr > var && isspace(*ptr)) ptr--;
+            while (*val && isspace(*val)) val++;
+
+            (void) install(var, val);
+        }
     }
 
-
     fclose(cfg_file);
-
-    cleanup:
     free(filename);
     free(m2);
     free(m);
