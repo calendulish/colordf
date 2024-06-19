@@ -17,7 +17,6 @@
  *               2016  Lara Maia <dev@lara.click>
  */
 
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 

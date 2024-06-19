@@ -17,13 +17,11 @@
  *               2016  Lara Maia <dev@lara.click>
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "colors.h"
 #include "conf.h"
-#include "common.h"
 
 char *bracket_color;
 char *gauge_color;

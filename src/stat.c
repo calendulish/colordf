@@ -20,11 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/param.h>
-#include <sys/mount.h>
-#include <sys/types.h>
 #include <math.h>
-#include <stdint.h>
 #include <mntent.h>
 
 #include "colors.h"
@@ -54,9 +50,6 @@ struct mount_entry *read_filesystem_list(const char *fs_type) {
         me->me_devname = strdup(mnt->mnt_fsname);
         me->me_mountdir = strdup(mnt->mnt_dir);
         me->me_type = strdup(mnt->mnt_type);
-        me->me_type_malloced = 1;
-        me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
-        me->me_remote = ME_REMOTE (me->me_devname, me->me_type);
 
         /* Add to the linked list. */
         *mtail = me;
