@@ -36,6 +36,6 @@ extern short show_pseudofs;
 
 short is_pseudofs(const char *fs_type);
 
-char *numeric_value(const double bytes);
+char *numeric_value(double bytes);
 
 #endif
