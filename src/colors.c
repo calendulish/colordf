@@ -32,8 +32,7 @@ char *fs_color;
 char *data_color;
 char *perc_color;
 
-char *cl(const char *color)
-{
+char *cl(const char *color) {
     if (!color)
         return NULL;
     else if (strcmp(color, "normal") == 0)
@@ -56,14 +55,13 @@ char *cl(const char *color)
     return NULL;
 }
 
-int read_colors()
-{
-    bracket_color = (char *)malloc(64);
-    gauge_color = (char *)malloc(64);
-    header_color = (char *)malloc(64);
-    fs_color = (char *)malloc(64);
-    data_color = (char *)malloc(64);
-    perc_color = (char *)malloc(64);
+int read_colors() {
+    bracket_color = (char *) malloc(64);
+    gauge_color = (char *) malloc(64);
+    header_color = (char *) malloc(64);
+    fs_color = (char *) malloc(64);
+    data_color = (char *) malloc(64);
+    perc_color = (char *) malloc(64);
 
 
     if (!(bracket_color = cl(get_config_item("bracket_color"))))

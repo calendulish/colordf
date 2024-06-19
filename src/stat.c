@@ -36,30 +36,29 @@ struct mount_entry *read_filesystem_list(const char *fs_type) {
     struct mount_entry *me;
     struct mount_entry **mtail = &mount_list;
 
-    struct mntent * mnt;
-    char * table = MOUNTED;
-    FILE * fp;
+    struct mntent *mnt;
+    char *table = MOUNTED;
+    FILE *fp;
 
-    fp = setmntent( table, "r" );
+    fp = setmntent(table, "r");
     if (!fp) return NULL;
 
-    while ( (mnt = getmntent(fp)) )
-    {
-    if (show_pseudofs == 0 && (is_pseudofs(mnt->mnt_type) == 1)) {
-      /* XXX: should we do something with it? */
-    } else {
-      me = malloc(sizeof(struct mount_entry));
-      me->me_devname = strdup(mnt->mnt_fsname);
-      me->me_mountdir = strdup(mnt->mnt_dir);
-      me->me_type = strdup(mnt->mnt_type);
-      me->me_type_malloced = 1;
-      me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
-      me->me_remote = ME_REMOTE (me->me_devname, me->me_type);
+    while ((mnt = getmntent(fp))) {
+        if (show_pseudofs == 0 && (is_pseudofs(mnt->mnt_type) == 1)) {
+            /* XXX: should we do something with it? */
+        } else {
+            me = malloc(sizeof(struct mount_entry));
+            me->me_devname = strdup(mnt->mnt_fsname);
+            me->me_mountdir = strdup(mnt->mnt_dir);
+            me->me_type = strdup(mnt->mnt_type);
+            me->me_type_malloced = 1;
+            me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
+            me->me_remote = ME_REMOTE (me->me_devname, me->me_type);
 
-      /* Add to the linked list. */
-      *mtail = me;
-      mtail = &me->me_next;
-    }
+            /* Add to the linked list. */
+            *mtail = me;
+            mtail = &me->me_next;
+        }
     }
 
     endmntent(fp);
@@ -76,22 +75,22 @@ void display_single_fs(const char *filesystem) {
         return;
     }
 
-    struct mount_entry * mount_list, * mnt;
+    struct mount_entry *mount_list, *mnt;
     struct statfs t;
 
     mount_list = read_filesystem_list("all");
     if (!mount_list) return;
 
-    for (mnt=mount_list; mnt!=NULL; mnt=mnt->me_next)
-    {
-    if (statfs(mnt->me_mountdir, &t) == -1) {
-      ERROR("damn!");
-      return;
-    }
-    if (memcmp(&s,&t,sizeof(struct statfs))==0) { /* found ! */
-      statfs_display_single_fs(&s,mnt->me_devname,mnt->me_mountdir,mnt->me_type);
-      return; /* only one possible match */
-    }
+    for (mnt = mount_list; mnt != NULL; mnt = mnt->me_next) {
+        if (statfs(mnt->me_mountdir, &t) == -1) {
+            ERROR("damn!");
+            return;
+        }
+
+        if (memcmp(&s, &t, sizeof(struct statfs)) == 0) { /* found ! */
+            statfs_display_single_fs(&s, mnt->me_devname, mnt->me_mountdir, mnt->me_type);
+            return; /* only one possible match */
+        }
     }
     /* not found ?! */
 }
@@ -137,7 +136,7 @@ void show_dev(const struct mount_entry *mnt) {
         return;
     }
 
-    statfs_display_single_fs(&s,mnt->me_devname,mnt->me_mountdir,mnt->me_type);
+    statfs_display_single_fs(&s, mnt->me_devname, mnt->me_mountdir, mnt->me_type);
 }
 
 void display_all_fs(const char *fstype) {
