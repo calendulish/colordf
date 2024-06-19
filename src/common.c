@@ -20,12 +20,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "common.h"
 #include "colors.h"
 
 double blocksize;
-char bs_suff;
 short human_readable;
 
 short show_pseudofs;
@@ -111,4 +111,18 @@ char *numeric_value(const double bytes) {
         (void) snprintf(buf, 255, "%7.0f", bytes);
 
     return buf;
+}
+
+int check_suffix(char *str, char suffix) {
+    size_t str_len = strlen(str);
+    char suffix_lower = tolower(suffix);
+
+    if (str_len >= 1 &&
+        (!memcmp(str + str_len - 1, &suffix, 1) ||
+         !memcmp(str + str_len - 1, &suffix_lower, 1))) {
+        str[str_len - 1] = '\0';
+        return 1;
+    }
+
+    return 0;
 }
