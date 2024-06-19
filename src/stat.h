@@ -30,9 +30,9 @@ struct mount_entry {
     char *me_mountdir;            /* Mount point directory pathname. */
     char *me_type;                /* "nfs", "4.2", etc. */
     dev_t me_dev;                 /* Device number of me_mountdir. */
-    unsigned int me_dummy : 1;    /* Nonzero for dummy filesystems. */
-    unsigned int me_remote : 1;   /* Nonzero for remote fileystems. */
-    unsigned int me_type_malloced : 1; /* Nonzero if me_type was malloced. */
+    unsigned int me_dummy: 1;     /* Nonzero for dummy filesystems. */
+    unsigned int me_remote: 1;    /* Nonzero for remote fileystems. */
+    unsigned int me_type_malloced: 1; /* Nonzero if me_type was malloced. */
     struct mount_entry *me_next;
 };
 
