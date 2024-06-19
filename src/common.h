@@ -29,7 +29,6 @@ char *bar(unsigned short n);
 void header();
 
 extern double blocksize;
-extern char bs_suff;
 extern short human_readable;
 
 extern short show_pseudofs;
@@ -37,5 +36,7 @@ extern short show_pseudofs;
 short is_pseudofs(const char *fs_type);
 
 char *numeric_value(double bytes);
+
+int check_suffix(char *str, char suffix);
 
 #endif
