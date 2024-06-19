@@ -44,21 +44,23 @@ struct mount_entry *read_filesystem_list(const char *fs_type) {
     if (!fp) return NULL;
 
     while ((mnt = getmntent(fp))) {
-        if (show_pseudofs == 0 && (is_pseudofs(mnt->mnt_type) == 1)) {
-            /* XXX: should we do something with it? */
-        } else {
-            me = malloc(sizeof(struct mount_entry));
-            me->me_devname = strdup(mnt->mnt_fsname);
-            me->me_mountdir = strdup(mnt->mnt_dir);
-            me->me_type = strdup(mnt->mnt_type);
-            me->me_type_malloced = 1;
-            me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
-            me->me_remote = ME_REMOTE (me->me_devname, me->me_type);
+        if (show_pseudofs == 0 && is_pseudofs(mnt->mnt_type) == 1)
+            continue;
 
-            /* Add to the linked list. */
-            *mtail = me;
-            mtail = &me->me_next;
-        }
+        if (strcmp(fs_type, "all") != 0 && strcmp(fs_type, mnt->mnt_type) != 0)
+            continue;
+
+        me = malloc(sizeof(struct mount_entry));
+        me->me_devname = strdup(mnt->mnt_fsname);
+        me->me_mountdir = strdup(mnt->mnt_dir);
+        me->me_type = strdup(mnt->mnt_type);
+        me->me_type_malloced = 1;
+        me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
+        me->me_remote = ME_REMOTE (me->me_devname, me->me_type);
+
+        /* Add to the linked list. */
+        *mtail = me;
+        mtail = &me->me_next;
     }
 
     endmntent(fp);
