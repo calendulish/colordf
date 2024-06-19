@@ -22,10 +22,7 @@
 
 #include <sys/param.h>
 #include <sys/mount.h>
-
-#ifdef __linux__
 #include <sys/vfs.h>
-#endif
 
 /* A mount table entry. */
 struct mount_entry {
