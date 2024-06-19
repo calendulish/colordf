@@ -91,7 +91,7 @@ void display_single_fs(const char *filesystem) {
 }
 
 void statfs_display_single_fs(const struct statfs *s, const char *device, const char *mountpoint, const char *fstype) {
-    uint64_t total, free, used;
+    double total, free, used;
     int usage;
 
     total = (double) s->f_blocks * (double) s->f_bsize / blocksize;
