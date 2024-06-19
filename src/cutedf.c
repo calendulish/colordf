@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
     read_config_file();
 
     if (get_config_item("human_readable")) {
-        if (atoi((const char *) get_config_item("human_readable")) == 1) {
+        if (strtol((const char *) get_config_item("human_readable"), NULL, 0)) {
             human_readable = 1;
             blocksize = 1;
         }
