@@ -14,7 +14,7 @@
  *
  * Copyright (C) 2004  Roman Bogorodskiy <bogorodskiy@inbox.ru>
  *                     Pierre Chifflier <chifflier@cpe.fr>
- *               2016  Lara Maia <dev@lara.click>
+ *               2024  Lara Maia <dev@lara.monster>
  */
 
 #include <stdio.h>
