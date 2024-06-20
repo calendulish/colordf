@@ -60,8 +60,9 @@ int main(int argc, char **argv) {
             blocksize = 1;
         }
     }
+
     double block_multiply = 1;
-    while ((ch = getopt_long(argc, argv, "Haghkmt:v", long_options, &option_index)) != -1)
+    while ((ch = getopt_long(argc, argv, "HB:aghkmt:v", long_options, &option_index)) != -1)
         switch (ch) {
             case 'a':
                 show_pseudofs = 1;
@@ -118,7 +119,7 @@ int main(int argc, char **argv) {
 static void show_help(void) {
     (void) printf("%s <dev@lara.monster> 2024\n\n"
                   "Options:\n"
-                  "\t-B, --blocksize=[size]\t    set the blocksize\n"
+                  "\t-B, --block-size=[size]\t    set the blocksize\n"
                   "\t   -k use 1K blocksize\n"
                   "\t   -m use 1M blocksize\n"
                   "\t   -g use 1G blocksize\n\n"
