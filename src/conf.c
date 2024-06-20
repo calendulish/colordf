@@ -159,14 +159,12 @@ int init_config(void) {
         var = strtok_r(line, "=", &val);
 
         if (var) {
-            var[strlen(var) - 1] = '\0';
-
             /* remove trailing spaces in var, and leading spaces in value */
             ptr = var + strlen(var) - 1;
             while (ptr > var && isspace(*ptr)) ptr--;
             while (*val && isspace(*val)) val++;
 
-            (void) install(var, val);
+            install(var, val);
         }
     }
 
