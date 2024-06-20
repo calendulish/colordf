@@ -24,6 +24,9 @@
 
 #define ERROR(s) (void)fprintf(stderr, "%s\n", s)
 
+#undef STREQ
+#define STREQ(a, b) (strcmp ((a), (b)) == 0)
+
 char *bar(unsigned short n);
 
 void header();
@@ -32,8 +35,6 @@ extern double blocksize;
 extern short human_readable;
 
 extern short show_pseudofs;
-
-short is_pseudofs(const char *fs_type);
 
 char *numeric_value(double bytes);
 

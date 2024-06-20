@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <libmount/libmount.h>
 
 #include "common.h"
 #include "colors.h"
@@ -60,36 +61,19 @@ void header() {
     printf("%s", header_color);
 
     if (header_showed == 0) {
-        printf("%-10s %12s %7s %7s %7s %-18s %s\n",
+        printf("%-14s %12s %7s %7s %7s %-18s %s\n",
                "Filesystem",
                "Type",
-               "Free",
-               "Used",
                "Total",
-               "Mnt pnt",
+               "Used",
+               "Avail",
+               "Mounted on",
                "Capacity"
         );
         header_showed = 1;
     }
 
     printf("%s", NORMAL);
-}
-
-short is_pseudofs(const char *fs_type) {
-    /* XXX:
-       - this list is not complete yet
-       - I'm not sure how it will work on Linux
-    */
-
-    if ((strcmp(fs_type, "devfs") == 0) ||
-        (strcmp(fs_type, "devpts") == 0) ||
-        (strcmp(fs_type, "proc") == 0) ||
-        (strcmp(fs_type, "sysfs") == 0) ||
-        (strcmp(fs_type, "usbfs") == 0)) {
-        return 1;
-    }
-
-    return 0;
 }
 
 char *numeric_value(const double bytes) {
@@ -99,16 +83,17 @@ char *numeric_value(const double bytes) {
 
     if (human_readable) {
         if ((bytes / 1073741824) >= 1) {
-            (void) snprintf(buf, 255, "%6.0fG", (bytes / 1073741824));
+            snprintf(buf, 255, "%6.1fG", (bytes / 1073741824));
         } else if ((bytes / 1048576) >= 1) {
-            (void) snprintf(buf, 255, "%6.0fM", (bytes / 1048576));
+            snprintf(buf, 255, "%6.1fM", (bytes / 1048576));
         } else if ((bytes / 1024) >= 1) {
-            (void) snprintf(buf, 255, "%6.0fK", (bytes / 1024));
+            snprintf(buf, 255, "%6.1fK", (bytes / 1024));
         } else {
-            (void) snprintf(buf, 255, "%7.0f", bytes);
+            snprintf(buf, 255, "%7.0f", bytes);
         }
-    } else
-        (void) snprintf(buf, 255, "%7.0f", bytes);
+    } else {
+        snprintf(buf, 255, "%7.0f", bytes);
+    }
 
     return buf;
 }
