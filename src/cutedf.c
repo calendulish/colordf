@@ -14,10 +14,10 @@
  *
  * Copyright (C) 2004  Roman Bogorodskiy <bogorodskiy@inbox.ru>
  *                     Pierre Chifflier <chifflier@cpe.fr>
- *               2016  Lara Maia <dev@lara.click>
+ *               2024  Lara Maia <dev@lara.monster>
  */
 
-#define VERSION "CuteDF v0.0.0"
+#define VERSION "CuteDF v1.0.0"
 
 #include <stdio.h>
 #include <stdlib.h>
