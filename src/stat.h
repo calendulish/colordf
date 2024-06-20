@@ -32,30 +32,8 @@ struct mount_entry {
     struct mount_entry *me_next;
 };
 
-#ifndef ME_DUMMY
-# define ME_DUMMY(Fs_name, Fs_type) \
-    (!strcmp (Fs_type, "autofs") \
-     /* for Irix 6.5 */ \
-     || !strcmp (Fs_type, "ignore"))
-#endif
-
-#undef STREQ
-#define STREQ(a, b) (strcmp ((a), (b)) == 0)
-
-#ifndef ME_REMOTE
-/* A file system is `remote' if its Fs_name contains a `:'
-   or if (it is of type smbfs and its Fs_name starts with `//').  */
-# define ME_REMOTE(Fs_name, Fs_type)    \
-    (strchr ((Fs_name), ':') != 0       \
-     || ((Fs_name)[0] == '/'            \
-         && (Fs_name)[1] == '/'         \
-         && STREQ (Fs_type, "smbfs")))
-#endif
-
 /*struct mount_entry *read_filesystem_list (int need_fs_type);*/
 struct mount_entry *read_filesystem_list(const char *fs_type);
-
-void show_dev(const struct mount_entry *mnt);
 
 void display_single_fs(const char *filesystem);
 

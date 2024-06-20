@@ -21,43 +21,60 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <mntent.h>
+#include <libmount/libmount.h>
 
 #include "colors.h"
 #include "common.h"
 #include "stat.h"
+
+static int fs_cmp(struct libmnt_table *tb, struct libmnt_fs *fs1, struct libmnt_fs *fs2);
 
 struct mount_entry *read_filesystem_list(const char *fs_type) {
     struct mount_entry *mount_list;
     struct mount_entry *me;
     struct mount_entry **mtail = &mount_list;
 
-    struct mntent *mnt;
-    char *table = MOUNTED;
-    FILE *fp;
+    struct libmnt_fs *fs;
+    struct libmnt_iter *iter;
+    struct libmnt_table *fstable = NULL;
 
-    fp = setmntent(table, "r");
-    if (!fp) return NULL;
+    struct statfs s;
 
-    while ((mnt = getmntent(fp))) {
-        if (show_pseudofs == 0 && is_pseudofs(mnt->mnt_type) == 1)
+    fstable = mnt_new_table_from_file("/proc/self/mountinfo");
+
+    // fallback
+    if (!fstable)
+        fstable = mnt_new_table_from_file(mnt_get_fstab_path());
+
+    if (show_pseudofs == 0)
+        mnt_table_uniq_fs(fstable, MNT_UNIQ_FORWARD, fs_cmp);
+
+    iter = mnt_new_iter(MNT_ITER_FORWARD);
+
+    while (mnt_table_next_fs(fstable, iter, &fs) == 0) {
+        // netfs not implemented
+        if (mnt_fs_is_netfs(fs))
             continue;
 
-        if (strcmp(fs_type, "all") != 0 && strcmp(fs_type, mnt->mnt_type) != 0)
+        // mount point inaccessible
+        if (statfs(mnt_fs_get_target(fs), &s) == -1)
+            continue;
+
+        if (!STREQ(fs_type, "all") && !STREQ(fs_type, mnt_fs_get_fstype(fs)))
             continue;
 
         me = malloc(sizeof(struct mount_entry));
-        me->me_devname = strdup(mnt->mnt_fsname);
-        me->me_mountdir = strdup(mnt->mnt_dir);
-        me->me_type = strdup(mnt->mnt_type);
+        me->me_devname = strdup(mnt_fs_get_source(fs));
+        me->me_mountdir = strdup(mnt_fs_get_target(fs));
+        me->me_type = strdup(mnt_fs_get_fstype(fs));
 
         /* Add to the linked list. */
         *mtail = me;
         mtail = &me->me_next;
     }
 
-    endmntent(fp);
-
+    mnt_free_iter(iter);
+    mnt_free_table(fstable);
     *mtail = NULL;
     return mount_list;
 }
@@ -92,55 +109,60 @@ void display_single_fs(const char *filesystem) {
 
 void statfs_display_single_fs(const struct statfs *s, const char *device, const char *mountpoint, const char *fstype) {
     double total, free, used;
-    int usage;
+    int perc;
 
     total = (double) s->f_blocks * (double) s->f_bsize / blocksize;
     free = (double) s->f_bfree * (double) s->f_bsize / blocksize;
     used = (double) total - (double) free;
+    perc = (int) rint((double) ((1.0 - (double) free / (double) total) * 100.0));
+
+    if (total == 0)
+        return;
 
     header();
 
-    /* check for pseudofs */
-    if (total != 0)
-        usage = (int) rint((double) ((1.0 - (double) free / (double) total) * 100.0));
-    else
-        return;
+    printf("%s%-14s%s %12s %s %s %s %-18s",
+           fs_color,
+           device,
+           data_color,
+           fstype,
+           numeric_value((double) total),
+           numeric_value((double) used),
+           numeric_value((double) free),
+           mountpoint
+    );
 
-    (void) printf("%s%-10s%s %12s %s %s %s %-18s %s %s(%i%%)%s\n",
-                  fs_color,
-                  device,
-                  data_color,
-                  fstype,
-                  numeric_value((double) free),
-                  numeric_value((double) used),
-                  numeric_value((double) total),
-                  mountpoint,
-                  bar((int) rint(usage / 10.0)),
-                  perc_color,
-                  usage,
-                  NORMAL
+    if (strlen(mountpoint) <= 17)
+        printf("%s ", bar((int) rint(perc / 10.0)));
+    else
+        printf("%*s", 13 + (18 - (int) strlen(mountpoint)), " ");
+
+    printf("%s(%i%%)%s\n",
+           perc_color,
+           perc,
+           NORMAL
     );
 
 }
 
-void show_dev(const struct mount_entry *mnt) {
-    struct statfs s;
-
-    if (statfs(mnt->me_mountdir, &s) == -1) {
-        ERROR("damn!");
-        return;
-    }
-
-    statfs_display_single_fs(&s, mnt->me_devname, mnt->me_mountdir, mnt->me_type);
-}
-
 void display_all_fs(const char *fstype) {
     struct mount_entry *mount_list, *mnt;
+    struct statfs s;
 
     mount_list = read_filesystem_list(fstype);
     if (!mount_list) return;
 
     for (mnt = mount_list; mnt != NULL; mnt = mnt->me_next) {
-        show_dev(mnt);
+        if (statfs(mnt->me_mountdir, &s) == -1)
+            continue;
+
+        statfs_display_single_fs(&s, mnt->me_devname, mnt->me_mountdir, mnt->me_type);
     }
+}
+
+static int fs_cmp(__attribute__((unused)) struct libmnt_table *tb, struct libmnt_fs *fs1, struct libmnt_fs *fs2) {
+    if (mnt_fs_is_pseudofs(fs1) || mnt_fs_is_pseudofs(fs2))
+        return 1;
+
+    return !mnt_fs_streq_srcpath(fs1, mnt_fs_get_srcpath(fs2));
 }
