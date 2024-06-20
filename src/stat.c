@@ -148,7 +148,7 @@ void statfs_display_single_fs(const struct statfs *s, const char *device, const 
     else
         printf("%*s", 13 + (18 - (int) strlen(mountpoint)), " ");
 
-    printf("%s%s(%i%%)%s\n",
+    printf("%s%s(%2i%%)%s\n",
            perc_background,
            perc_color,
            perc,
