@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
     blocksize = 1048576;
     show_pseudofs = 0;
 
-    read_config_file();
+    init_config();
 
     if (get_config_item("human_readable")) {
         if (strtol((const char *) get_config_item("human_readable"), NULL, 0)) {
