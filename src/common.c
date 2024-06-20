@@ -25,36 +25,37 @@
 
 #include "common.h"
 #include "colors.h"
+#include "conf.h"
 
 double blocksize;
 short human_readable;
-
 short show_pseudofs;
-
 int header_showed = 0;
 
 char *bar(unsigned short n) {
-    int i;
-    char *gauge = (char *) malloc(11);
+    int i = 1;
+    char *gauge = (char *) malloc(40);
+    char *gauge_symbol = get_config_item("gauge_symbol");
 
     *gauge = '\0'; /* avoid apparition of artefacts: strcat on non-initialized memory ... */
 
     if (n > 10)
         return NULL;
 
-    for (i = 1; i <= 10; i++) {
-        if (i <= n)
-            gauge = strcat(gauge, ">");
-        else
-            gauge = strcat(gauge, " ");
+    while (i <= n) {
+        gauge = strncat(gauge, gauge_symbol, 4);
+        i++;
     }
+
+    if (i <= 10)
+        snprintf(gauge + strlen(gauge), 40, "%s%*s", RESET_COLOR, 11 - i, " ");
 
     return gauge;
 }
 
 void header(void) {
     if (header_showed == 0) {
-        printf("%s%s%-14s %12s %7s %7s %7s %-18s %-17s%s\n",
+        printf("%s%s%-14s %12s %7s %7s %7s %-18s    %5s      %s\n",
                header_background,
                header_color,
                "Filesystem",

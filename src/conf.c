@@ -27,7 +27,7 @@
 
 #define MAXLEN 255
 
-static char *get_config_filename() {
+static char *get_config_filename(void) {
     /*
      * we try to respect XDG Base Directory Specification:
      * http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
@@ -67,15 +67,16 @@ int init_config(void) {
     unsigned int length;
     char *filename;
 
+    install("gauge_symbol", "▮");
     install("bracket_color", "blue");
-    install("gauge_color", "black");
+    install("gauge_color", "red");
     install("header_color", "light_yellow");
     install("fs_color", "yellow");
     install("data_color", "default");
     install("perc_color", "cyan");
 
     install("bracket_background", "default");
-    install("gauge_background", "red");
+    install("gauge_background", "default");
     install("header_background", "blue");
     install("fs_background", "default");
     install("data_background", "default");
