@@ -20,7 +20,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-int read_config_file(void);
+int init_config(void);
 
 char *get_config_item(char *name);
 

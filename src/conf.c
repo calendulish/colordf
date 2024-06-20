@@ -42,7 +42,7 @@ static char *get_config_filename() {
     xdg_config_home = getenv("XDG_CONFIG_HOME");
 
     if (xdg_config_home != NULL && strlen(xdg_config_home) != 0) {
-            snprintf(config_home, MAXLEN, "%s/.config", xdg_config_home);
+        snprintf(config_home, MAXLEN, "%s/.config", xdg_config_home);
     } else {
         char *home;
         home = getenv("HOME");
@@ -59,13 +59,27 @@ static char *get_config_filename() {
     return config_full_path;
 }
 
-int read_config_file(void) {
+int init_config(void) {
     FILE *cfg_file = NULL;
     char *m, *m2;
     char *line, *comment;
     char *ptr;
     unsigned int length;
     char *filename;
+
+    install("bracket_color", "blue");
+    install("gauge_color", "black");
+    install("header_color", "light_yellow");
+    install("fs_color", "yellow");
+    install("data_color", "default");
+    install("perc_color", "cyan");
+
+    install("bracket_background", "default");
+    install("gauge_background", "red");
+    install("header_background", "blue");
+    install("fs_background", "default");
+    install("data_background", "default");
+    install("perc_background", "default");
 
     filename = (char *) malloc(MAXLEN + 1);
     filename = get_config_filename();

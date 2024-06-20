@@ -29,7 +29,7 @@
 
 char *bar(unsigned short n);
 
-void header();
+void header(void);
 
 extern double blocksize;
 extern short human_readable;

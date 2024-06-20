@@ -36,7 +36,6 @@ int header_showed = 0;
 char *bar(unsigned short n) {
     int i;
     char *gauge = (char *) malloc(11);
-    char *ret = (char *) malloc(64);
 
     *gauge = '\0'; /* avoid apparition of artefacts: strcat on non-initialized memory ... */
 
@@ -50,30 +49,25 @@ char *bar(unsigned short n) {
             gauge = strcat(gauge, " ");
     }
 
-    sprintf(ret, "%s[%s%s%s]%s", bracket_color, gauge_color,
-            gauge, bracket_color, NORMAL);
-
-
-    return ret;
+    return gauge;
 }
 
-void header() {
-    printf("%s", header_color);
-
+void header(void) {
     if (header_showed == 0) {
-        printf("%-14s %12s %7s %7s %7s %-18s %s\n",
+        printf("%s%s%-14s %12s %7s %7s %7s %-18s %-17s%s\n",
+               header_background,
+               header_color,
                "Filesystem",
                "Type",
                "Total",
                "Used",
                "Avail",
                "Mounted on",
-               "Capacity"
+               "Capacity",
+               RESET_COLOR
         );
         header_showed = 1;
     }
-
-    printf("%s", NORMAL);
 }
 
 char *numeric_value(const double bytes) {

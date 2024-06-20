@@ -121,9 +121,11 @@ void statfs_display_single_fs(const struct statfs *s, const char *device, const 
 
     header();
 
-    printf("%s%-14s%s %12s %s %s %s %-18s",
+    printf("%s%s%-14s%s%s %12s %s %s %s %-18s",
+           fs_background,
            fs_color,
            device,
+           data_background,
            data_color,
            fstype,
            numeric_value((double) total),
@@ -133,14 +135,24 @@ void statfs_display_single_fs(const struct statfs *s, const char *device, const 
     );
 
     if (strlen(mountpoint) <= 17)
-        printf("%s ", bar((int) rint(perc / 10.0)));
+        printf("%s%s[%s%s%s%s%s]%s ",
+               bracket_background,
+               bracket_color,
+               gauge_background,
+               gauge_color,
+               bar((int) rint(perc / 10.0)),
+               bracket_background,
+               bracket_color,
+               RESET_COLOR
+               );
     else
         printf("%*s", 13 + (18 - (int) strlen(mountpoint)), " ");
 
-    printf("%s(%i%%)%s\n",
+    printf("%s%s(%i%%)%s\n",
+           perc_background,
            perc_color,
            perc,
-           NORMAL
+           RESET_COLOR
     );
 
 }
