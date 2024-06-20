@@ -8,9 +8,46 @@ colordf
 This is a colored and configurable version of df, forked from [cdf](https://sourceforge.net/projects/bmp-plugins.berlios/).  
 The df program show information about the file system as size, type, mount point, etc.
 
+Config Options
+--------------
+colordf support some config options using a config file named:  
+~/.config/colordf.conf
+
+default config (special value `default` uses the current terminal config):
+```ini
+gauge_symbol=▮
+human_readable=0
+bracket_color=blue
+bracket_background=default
+gauge_color=red
+gauge_background=default
+header_color=light_yellow
+header_background=blue
+fs_color=yellow
+fs_background=default
+data_color=default
+data_background=default
+perc_color=cyan
+prec_background=default
+```
+
+colors available to use with the above options:
+
+| normal colours                                                      | light colours                              | special colours                    |
+|---------------------------------------------------------------------|--------------------------------------------|------------------------------------|
+| $`\color{black}\textsf{black}`$  $`\color{white}\textsf{(black)}`$  |                                            |                                    |
+| $`\color{red}\textsf{red}`$                                         | $`\color{#ff4d4d}\textsf{light\_red}`$     | $`\color{#FF1493}\textsf{pink}`$   |
+| $`\color{green}\textsf{green}`$                                     | $`\color{#7FFF00}\textsf{light\_green}`$   | $`\color{#DDA0DD}\textsf{rose}`$   |
+| $`\color{#D2691E}\textsf{yellow}`$                                  | $`\color{yellow}\textsf{light\_yellow}`$   | $`\color{orange}\textsf{orange}`$  |
+| $`\color{#00008B}\textsf{blue}`$                                    | $`\color{blue}\textsf{light\_blue}`$       | $`\color{#9400D3}\textsf{purple}`$ |
+| $`\color{#8B008B}\textsf{magenta}`$                                 | $`\color{magenta}\textsf{light\_magenta}`$ | $`\color{#6600cc}\textsf{violet}`$ |
+| $`\color{#008B8B}\textsf{cyan}`$                                    | $`\color{cyan}\textsf{light\_cyan}`$       |                                    |
+| $`\color{gray}\textsf{gray}`$                                       | $`\color{#A9A9A9}\textsf{light\_gray}`$    |                                    |
+| $`\color{white}\textsf{white}`$  $`\color{black}\textsf{(white)}`$  |                                            |                                    |
+
 Command Line Interface
 -----------------
-```
+```commandline
 CuteDF v1.0.0 <dev@lara.monster> 2024
 
 Options:
@@ -24,7 +61,6 @@ Options:
         -a, --show-pseudofs         show pseudofs
         -v, --version               print version and exit
         -H, --help                  print this text and exit
-
 ```
 ___________________________________________________________________________________________
 
