@@ -28,7 +28,7 @@
 #include <config.h>
 #endif
 
-#include "cutedf.h"
+#include "colordf.h"
 #include "stat.h"
 #include "common.h"
 #include "colors.h"

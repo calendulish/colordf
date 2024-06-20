@@ -53,7 +53,7 @@ static char *get_config_filename(void) {
             return NULL;
     }
 
-    snprintf(config_full_path, MAXLEN, "%s/cutedf.conf", config_home);
+    snprintf(config_full_path, MAXLEN, "%s/colordf.conf", config_home);
     free(config_home);
 
     return config_full_path;
