@@ -119,6 +119,9 @@ void statfs_display_single_fs(const struct statfs *s, const char *device, const 
     if (total == 0)
         return;
 
+    if (show_pseudofs == 0 && strstr(mountpoint, "/run/credentials") != NULL)
+        return;
+
     header();
 
     printf("%s%s%-14s%s%s %12s %s %s %s %-18s",
