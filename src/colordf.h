@@ -17,9 +17,9 @@
  *               2024  Lara Maia <dev@lara.monster>
  */
 
-#ifndef CUTEDF_H
-#define CUTEDF_H
+#ifndef COLORDF_H
+#define COLORDF_H
 
 static void show_help(void);
 
-#endif /* CUTEDF_H */
+#endif /* COLORDF_H */

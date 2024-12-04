@@ -17,7 +17,7 @@
  *               2024  Lara Maia <dev@lara.monster>
  */
 
-#define VERSION "CuteDF v1.0.0"
+#define VERSION "ColorDF v1.1.0"
 
 #include <stdio.h>
 #include <stdlib.h>

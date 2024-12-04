@@ -48,7 +48,7 @@ colors available to use with the above options:
 Command Line Interface
 -----------------
 ```commandline
-CuteDF v1.0.0 <dev@lara.monster> 2024
+ColorDF v1.1.0 <dev@lara.monster> 2024
 
 Options:
         -B, --block-size=[size]     set the blocksize
