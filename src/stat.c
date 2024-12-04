@@ -148,12 +148,15 @@ void statfs_display_single_fs(const struct statfs *s, const char *device, const 
     else
         printf("%*s", 13 + (18 - (int) strlen(mountpoint)), " ");
 
-    printf("%s%s(%2i%%)%s\n",
-           perc_background,
-           perc_color,
-           perc,
-           RESET_COLOR
-    );
+    if (strlen(mountpoint) <= 30)
+        printf("%s%s(%2i%%)%s\n",
+               perc_background,
+               perc_color,
+               perc,
+               RESET_COLOR
+        );
+    else
+        printf("\n");
 
 }
 
